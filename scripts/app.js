@@ -1,46 +1,18 @@
 var all_entries //to store json from google sheets
-
+var filteredData
 
 $(document).ready(function() {
     writeJSON()
     .then(() => {
         populateFilters();
         renderBoxes();
+        $("#Search").prop('disabled', false);
     })
     $('select').on('change', function(){
-        selected_district = $('#District').find(':selected').text()
-        selected_type = $('#Type').find(':selected').text()
-        selected_status = $('#Status').find(':selected').text()
-        filteredData = all_entries.filter((x) => {
-            district_filter = selected_district == "All Districts" ? true : x.gsx$district.$t.trim() == selected_district
-            type_filter = selected_type == "All Types" ? true : x.gsx$typeofservice.$t.trim() == selected_type
-            status_filter = false;
-            status_text = x.gsx$status.$t.trim()
-            switch(selected_status){
-                case "All Status":
-                    status_filter = true;
-                    break;
-                case "Active":
-                    acceptable_status = ["Active", "Active.","ACTIVE","active","active.","ACTIVE."]
-                    status_filter =  acceptable_status.includes(status_text)?true : false
-                    break;
-                case "Inactive":
-                    acceptable_status = ["Inactive", "Inactive?", "Not active","NOT ACTIVE"]
-                    status_filter =  acceptable_status.includes(status_text)?true : false
-                    break;
-                case "Others":
-                    unacceptable_status = ["Active", "Active.","ACTIVE","active","active.","ACTIVE.",
-                    "Inactive", "Inactive?", "Not active","NOT ACTIVE"]
-                    if(unacceptable_status.includes(status_text)){
-                        status_filter = false
-                    } else {
-                        status_filter = true
-                    }
-                    break;
-            }
-            return district_filter&&status_filter&&type_filter
-        })
-        renderSelectedData(filteredData)
+        filterChoosenData()
+    })
+    $('#Search').on('keyup',function(){
+        searchData()
     })
 
 })
@@ -160,7 +132,7 @@ function renderSelectedData(data){
                                 <div class="media-content">
                                 <div class="content">
                                 <p>
-                                    Click on the map icon to view location.
+                                    Click the map icon to view location.
                                 </p>
                                 </div>
                             </div>`
@@ -172,7 +144,7 @@ function renderSelectedData(data){
                   <strong>Name: </strong><span id="name">${entries[i].gsx$name.$t.trim()}</span><br>
                   <strong>Contact Number(s): </strong><span id="number">${phone_element}</span><br>
                   <strong>Type of Service: </strong><span id="number">${entries[i].gsx$typeofservice.$t.trim()}</span><br>
-                  <strong>Location: </strong> <span id="location">${entries[i].gsx$location.$t.trim()}t<span>
+                  <strong>Location: </strong> <span id="location">${entries[i].gsx$location.$t.trim()}<span>
                   <br>
                   <strong>Status: </strong> <span id="status">${entries[i].gsx$status.$t.trim()}</span><br>
                   <strong>Date: </strong> <span id="data">${entries[i].gsx$statusason.$t.trim()}</span><br>
@@ -190,4 +162,53 @@ function renderSelectedData(data){
     }
     $('#data_boxes').append(elements)
 }
+}
+
+function filterChoosenData(){
+    selected_district = $('#District').find(':selected').text()
+        selected_type = $('#Type').find(':selected').text()
+        selected_status = $('#Status').find(':selected').text()
+        filteredData = all_entries.filter((x) => {
+            district_filter = selected_district == "All Districts" ? true : x.gsx$district.$t.trim() == selected_district
+            type_filter = selected_type == "All Types" ? true : x.gsx$typeofservice.$t.trim() == selected_type
+            status_filter = false;
+            status_text = x.gsx$status.$t.trim()
+            switch(selected_status){
+                case "All Status":
+                    status_filter = true;
+                    break;
+                case "Active":
+                    acceptable_status = ["Active", "Active.","ACTIVE","active","active.","ACTIVE."]
+                    status_filter =  acceptable_status.includes(status_text)?true : false
+                    break;
+                case "Inactive":
+                    acceptable_status = ["Inactive", "Inactive?", "Not active","NOT ACTIVE"]
+                    status_filter =  acceptable_status.includes(status_text)?true : false
+                    break;
+                case "Others":
+                    unacceptable_status = ["Active", "Active.","ACTIVE","active","active.","ACTIVE.",
+                    "Inactive", "Inactive?", "Not active","NOT ACTIVE"]
+                    if(unacceptable_status.includes(status_text)){
+                        status_filter = false
+                    } else {
+                        status_filter = true
+                    }
+                    break;
+            }
+            return district_filter&&status_filter&&type_filter
+        })
+        renderSelectedData(filteredData)
+        $('#Search').val('') //empty search box text
+}
+
+
+function searchData(){
+    keyword = $('#Search').val().toLowerCase()
+        data_search = filteredData?filteredData:all_entries //data to be searched
+        mathced_data = data_search.filter((x) => {
+            details_match = x.gsx$details.$t.toLowerCase().trim().includes(keyword)
+            location_match = x.gsx$location.$t.toLowerCase().trim().includes(keyword)
+            return details_match||location_match
+        })
+        renderSelectedData(mathced_data)
 }
