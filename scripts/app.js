@@ -204,7 +204,7 @@ function filterChoosenData(){
 
 function searchData(){
     keyword = $('#Search').val().toLowerCase()
-        if(keyword.length>=3){
+        if(keyword.length>=3 || keyword==''){
         data_search = filteredData?filteredData:all_entries //data to be searched
         mathced_data = data_search.filter((x) => {
             details_match = x.gsx$details.$t.toLowerCase().trim().includes(keyword)
