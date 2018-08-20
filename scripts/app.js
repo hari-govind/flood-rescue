@@ -204,11 +204,14 @@ function filterChoosenData(){
 
 function searchData(){
     keyword = $('#Search').val().toLowerCase()
+        if(keyword.length>=3){
         data_search = filteredData?filteredData:all_entries //data to be searched
         mathced_data = data_search.filter((x) => {
             details_match = x.gsx$details.$t.toLowerCase().trim().includes(keyword)
             location_match = x.gsx$location.$t.toLowerCase().trim().includes(keyword)
-            return details_match||location_match
+            type_match = x.gsx$typeofservice.$t.toLowerCase().trim().includes(keyword)
+            return details_match||location_match||type_match
         })
         renderSelectedData(mathced_data)
+    }
 }
