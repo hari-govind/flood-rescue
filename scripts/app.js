@@ -137,18 +137,40 @@ function renderSelectedData(data){
             nums = phone_numbers.replace(/ /g,'').split(',') //array of given numbers
             phone_element = ''
             for(j=0;j<nums.length;j++){
-                phone_element = phone_element + ` <a href=tel:${nums[j]}>${nums[j]}</a>  `
+                seperator = (j+1==nums.length)?'':' / '
+                phone_element = phone_element + `<a href=tel:${nums[j]}>${nums[j]}</a>` + seperator
             }
 
         } catch(err){
             console.log(err)
+        }
+        map_link = entries[i].gsx$googlemapslink.$t.trim()
+        map_element = map_link == ''? "Map Not Available" : ""
+        if(map_link == ''){
+            map_element = "Map not available."
+        } else {
+            map_element = `<div class="media">
+                                <figure class="media-left">
+                                <p class="image is-64x64">
+                                <a href="${map_link}" target="_blank">
+                                <img src="images/maps.png">
+                                </a>
+                                </p>
+                                </figure>
+                                <div class="media-content">
+                                <div class="content">
+                                <p>
+                                    Click on the map icon to view location.
+                                </p>
+                                </div>
+                            </div>`
         }
         elem = `<div class="box">
         <div class="columns">
                 <div class="column">
                   <h1 class="title is-4"><span id="district">${entries[i].gsx$district.$t.trim()}</span></h1>
                   <strong>Name: </strong><span id="name">${entries[i].gsx$name.$t.trim()}</span><br>
-                  <strong>Contact Number: </strong><span id="number">${phone_element}</span><br>
+                  <strong>Contact Number(s): </strong><span id="number">${phone_element}</span><br>
                   <strong>Type of Service: </strong><span id="number">${entries[i].gsx$typeofservice.$t.trim()}</span><br>
                   <strong>Location: </strong> <span id="location">${entries[i].gsx$location.$t.trim()}t<span>
                   <br>
@@ -160,7 +182,7 @@ function renderSelectedData(data){
                     ${entries[i].gsx$details.$t.trim()}
                 </div>
                 <div class="column">
-                  Map
+                  ${map_element}
                 </div>
               </div>
 </div>`
