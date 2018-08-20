@@ -131,18 +131,29 @@ function renderSelectedData(data){
     var elements = $();
     entries = data
     for(i=0;i<entries.length;i++){
+        phone_numbers = entries[i].gsx$contactnumber.$t.trim()
+        var phone_element = phone_numbers
+        try{
+            nums = phone_numbers.replace(/ /g,'').split(',') //array of given numbers
+            phone_element = ''
+            for(j=0;j<nums.length;j++){
+                phone_element = phone_element + ` <a href=tel:${nums[j]}>${nums[j]}</a>  `
+            }
+
+        } catch(err){
+            console.log(err)
+        }
         elem = `<div class="box">
         <div class="columns">
                 <div class="column">
                   <h1 class="title is-4"><span id="district">${entries[i].gsx$district.$t.trim()}</span></h1>
                   <strong>Name: </strong><span id="name">${entries[i].gsx$name.$t.trim()}</span><br>
-                  <strong>Contact Number: </strong><span id="number">${entries[i].gsx$contactnumber.$t.trim()}</span><br>
+                  <strong>Contact Number: </strong><span id="number">${phone_element}</span><br>
                   <strong>Type of Service: </strong><span id="number">${entries[i].gsx$typeofservice.$t.trim()}</span><br>
                   <strong>Location: </strong> <span id="location">${entries[i].gsx$location.$t.trim()}t<span>
                   <br>
                   <strong>Status: </strong> <span id="status">${entries[i].gsx$status.$t.trim()}</span><br>
                   <strong>Date: </strong> <span id="data">${entries[i].gsx$statusason.$t.trim()}</span><br>
-                  <strong>Volunteer in charge: </strong> <span id="volunteer">${entries[i]['gsx$volunteer-in-charge'].$t.trim()}</span>
                 </div>
                 <div class="column">
                     <strong>Details: </strong><br>
