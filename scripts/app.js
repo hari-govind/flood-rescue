@@ -46,13 +46,13 @@ function getFilters(){
             district = row.gsx$district.$t.trim()
             type = row.gsx$typeofservice.$t.trim()
             retrived_status = row.gsx$status.$t.trim()
-            condition[retrived_status] = 1
-            districts[district] = 1
-            types[type] = 1
+                condition[retrived_status] = 1
+                districts[district] = 1
+                types[type] = 1
         }
-        data = {districts: Object.keys(districts),
-                types: Object.keys(types),
-                status: Object.keys(condition)}
+        data = {districts: Object.keys(districts).sort(),
+                types: Object.keys(types).sort(),
+                status: Object.keys(condition).sort()}
         return(data)
 }
 
@@ -140,7 +140,7 @@ function renderSelectedData(data){
         elem = `<div class="box">
         <div class="columns">
                 <div class="column">
-                  <h1 class="title is-4"><span id="district">${entries[i].gsx$district.$t.trim()}</span></h1>
+                  <h1 class="title is-4">${i+1}. <span id="district">${entries[i].gsx$district.$t.trim()}</span></h1>
                   <strong>Name: </strong><span id="name">${entries[i].gsx$name.$t.trim()}</span><br>
                   <strong>Contact Number(s): </strong><span id="number">${phone_element}</span><br>
                   <strong>Type of Service: </strong><span id="number">${entries[i].gsx$typeofservice.$t.trim()}</span><br>
@@ -204,14 +204,18 @@ function filterChoosenData(){
 
 function searchData(){
     keyword = $('#Search').val().toLowerCase()
-        if(keyword.length>=3 || keyword==''){
+        if(keyword.length>=3){
+            $('#search-help').hide()
         data_search = filteredData?filteredData:all_entries //data to be searched
         mathced_data = data_search.filter((x) => {
             details_match = x.gsx$details.$t.toLowerCase().trim().includes(keyword)
             location_match = x.gsx$location.$t.toLowerCase().trim().includes(keyword)
             type_match = x.gsx$typeofservice.$t.toLowerCase().trim().includes(keyword)
-            return details_match||location_match||type_match
+            name_match = x.gsx$name.$t.toLowerCase().trim().includes(keyword)
+            return details_match||location_match||type_match || name_match
         })
         renderSelectedData(mathced_data)
+    } else {
+        $('#search-help').show()
     }
 }

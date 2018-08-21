@@ -5,7 +5,9 @@
 .control select, .input{
 	width: 260px;
 }
-
+#search-help{
+	display: none;
+}
 
 /** For Loading Animation from icons8.com*/
 .cssload-thecube {
