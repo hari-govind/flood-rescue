@@ -47,11 +47,22 @@ function getFilters(){
             type = row.gsx$typeofservice.$t.trim()
             retrived_status = row.gsx$status.$t.trim()
                 condition[retrived_status] = 1
-                districts[district] = 1
-                types[type] = 1
+                //Categories NA, Multi-district, and State-wide to be merged under All kerala
+                merged_districts = ['NA','Multi-district', 'State-wide','Outside Kerala']
+                if (!merged_districts.includes(district)){
+                    districts[district] = 1
+                }
+                //Types that are to be at top and known, these categories will not be automatically inserted
+                ignoring_types = ['Ambulance Services', 'Medical', 'Animal Rescue', 'Volunteering',
+                'House Cleaning','Electrical Maintenance and Plumbing','Drinking Water','Helpline',
+                'Transportation','Collection Point','Other']
+                if(!ignoring_types.includes(type)){
+                    types[type] = 1
+                }
         }
+        
         data = {districts: Object.keys(districts).sort(),
-                types: Object.keys(types).sort(),
+                types: ignoring_types.concat(Object.keys(types).sort()),
                 status: Object.keys(condition).sort()}
         return(data)
 }
@@ -72,7 +83,7 @@ function populateFilters(){
     //populates filter dropdowns
     data = getFilters()
     for(i=0;i<data.districts.length;i++){
-        $('#District').append(new Option (data.districts[i], data.districts[i]))
+        $('#DistrictGroup').append(new Option (data.districts[i], data.districts[i]))
     }
     for(i=0;i<data.types.length;i++){
         $('#Type').append(new Option (data.types[i], data.types[i]))
@@ -170,10 +181,15 @@ function renderSelectedData(data){
 
 function filterChoosenData(){
     selected_district = $('#District').find(':selected').text()
-        selected_type = $('#Type').find(':selected').text()
+        selected_type = $('#Type').find(':selected').val()
         selected_status = $('#Status').find(':selected').text()
         filteredData = all_entries.filter((x) => {
-            district_filter = selected_district == "All Districts" ? true : x.gsx$district.$t.trim() == selected_district
+            merged_districts = ['NA','Multi-district', 'State-wide']
+            if(!merged_districts.includes(x.gsx$district.$t.trim())){
+                district_filter = selected_district == "All Districts" ? true : x.gsx$district.$t.trim() == selected_district
+            } else {
+                district_filter = selected_district == "All Kerala" ? true : false
+            }
             type_filter = selected_type == "All Types" ? true : x.gsx$typeofservice.$t.trim() == selected_type
             status_filter = false;
             status_text = x.gsx$status.$t.trim()
