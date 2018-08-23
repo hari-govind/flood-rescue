@@ -233,7 +233,8 @@ function searchData(){
             location_match = x.gsx$location.$t.toLowerCase().trim().includes(keyword)
             type_match = x.gsx$typeofservice.$t.toLowerCase().trim().includes(keyword)
             name_match = x.gsx$name.$t.toLowerCase().trim().includes(keyword)
-            return details_match||location_match||type_match || name_match
+            phone_match = x.gsx$contactnumber.$t.trim().includes(keyword)
+            return details_match||location_match||type_match || name_match || phone_match
         })
         renderSelectedData(mathced_data)
     } else {
