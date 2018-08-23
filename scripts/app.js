@@ -178,7 +178,7 @@ function filterChoosenData(){
                     status_filter = true;
                     break;
                 case "Active":
-                    acceptable_status = ["Active", "Active.","ACTIVE","active","active.","ACTIVE."]
+                    acceptable_status = ["Active", "Active.","ACTIVE","active","active.","ACTIVE.", "","verified","Verified"]
                     status_filter =  acceptable_status.includes(status_text)?true : false
                     break;
                 case "Inactive":
