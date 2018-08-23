@@ -181,7 +181,7 @@ function renderSelectedData(data){
 }
 
 function filterChoosenData(){
-    selected_district = $('#District').find(':selected').text()
+    selected_district = $('#District').find(':selected').val()
         selected_type = $('#Type').find(':selected').val()
         selected_status = $('#Status').find(':selected').text()
         filteredData = all_entries.filter((x) => {
@@ -189,7 +189,7 @@ function filterChoosenData(){
             if(!merged_districts.includes(x.gsx$district.$t.trim())){
                 district_filter = selected_district == "All Districts" ? true : x.gsx$district.$t.trim() == selected_district
             } else {
-                district_filter = selected_district == "All Kerala" ? true : false
+                district_filter = selected_district == "All Kerala"|| selected_district=="All Districts" ? true : false
             }
             type_filter = selected_type == "All Types" ? true : x.gsx$typeofservice.$t.trim() == selected_type
             status_filter = false;
