@@ -159,8 +159,12 @@ function renderSelectedData(data){
               </div>
 </div>`
         elements = elements.add(elem)
+        //render 10 boxes at a time
+        if(i%10==0||i-entries.length <=10){
+            $('#data_boxes').append(elements)
+            elements = $()
+        }
     }
-    $('#data_boxes').append(elements)
 }
 }
 
