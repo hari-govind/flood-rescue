@@ -258,7 +258,9 @@ function renderInfo(){
         <div class="message-body">
                 We currently have <strong>${all_entries.length}</strong> entries. You can either search 
                 through this entire data by entering your keyword above or narrow down your result using the dropdown fields. 
-                Choose your district(or <strong>All Districts</strong> to get complete data) from the above dropdown to get matching results. Search for service/location/details using the search field above.
+                Choose your district(or <strong>All </strong> to get complete data) from the above dropdown to get matching results. Search for service/location/details using the search field above.
+                <br><br><br>
+                <a class="button is-success is-outlined is-medium is-fullwidth" href="https://docs.google.com/forms/d/e/1FAIpQLScXJQtgPUjJmUTkGeEXV1QWWtJum_ju6vGgWVZH3LjqyT72rw/viewform">Enroll Yourself as a Volunteer!</a>
         </div>
     </article>`
     $('#data_boxes').empty();
