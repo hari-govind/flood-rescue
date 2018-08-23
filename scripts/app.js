@@ -5,7 +5,8 @@ $(document).ready(function() {
     writeJSON()
     .then(() => {
         populateFilters();
-        renderBoxes();
+        //renderBoxes();
+        renderInfo();
         $("#Search").prop('disabled', false);
     })
     $('select').on('change', function(){
@@ -238,4 +239,19 @@ function searchData(){
     } else {
         $('#search-help').show()
     }
+}
+
+function renderInfo(){
+    message_elem = `<article class="message is-primary">
+        <div class="message-header">
+                <p>Welcome to keralafloodrescue.org</p>
+        </div>
+        <div class="message-body">
+                We currently have <strong>${all_entries.length}</strong> entries. You can either search 
+                through this entire data by entering your keyword above or narrow down your result using the dropdown fields. 
+                Choose your district(or <strong>All Districts</strong> to get complete data) from the above dropdown to get matching results. Search for service/location/details using the search field above.
+        </div>
+    </article>`
+    $('#data_boxes').empty();
+    $('#data_boxes').append(message_elem);
 }
