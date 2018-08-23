@@ -1,5 +1,6 @@
 var all_entries //to store json from google sheets
-var filteredData
+var filteredData //data after applying filters
+var otherTypes //categories to be included in others
 
 $(document).ready(function() {
     writeJSON()
@@ -58,12 +59,13 @@ function getFilters(){
                 'House Cleaning','Electrical Maintenance and Plumbing','Drinking Water','Helpline',
                 'Transportation','Collection Point','Other']
                 if(!ignoring_types.includes(type)){
-                    types[type] = 1
+                   types[type] = 1
                 }
         }
         
         data = {districts: Object.keys(districts).sort(),
-                types: ignoring_types.concat(Object.keys(types).sort()),
+                types: ignoring_types,
+                other_types: Object.keys(types),
                 status: Object.keys(condition).sort()}
         return(data)
 }
@@ -86,6 +88,8 @@ function populateFilters(){
     for(i=0;i<data.districts.length;i++){
         $('#DistrictGroup').append(new Option (data.districts[i], data.districts[i]))
     }
+
+    otherTypes = data.other_types
     for(i=0;i<data.types.length;i++){
         $('#Type').append(new Option (data.types[i], data.types[i]))
     }
@@ -191,7 +195,11 @@ function filterChoosenData(){
             } else {
                 district_filter = selected_district == "All Kerala"|| selected_district=="All Districts" ? true : false
             }
+            if(!otherTypes.includes(x.gsx$typeofservice.$t.trim())){
             type_filter = selected_type == "All Types" ? true : x.gsx$typeofservice.$t.trim() == selected_type
+            } else {
+                type_filter = selected_type == "Other" || selected_type=="All Types"? true : false
+            }
             status_filter = false;
             status_text = x.gsx$status.$t.trim()
             switch(selected_status){
