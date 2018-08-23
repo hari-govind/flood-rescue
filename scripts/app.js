@@ -49,7 +49,7 @@ function getFilters(){
             retrived_status = row.gsx$status.$t.trim()
                 condition[retrived_status] = 1
                 //Categories NA, Multi-district, and State-wide to be merged under All kerala
-                merged_districts = ['NA','Multi-district', 'State-wide','Outside Kerala']
+                merged_districts = ['NA','Multi-district', 'State-wide','Outside Kerala','All Kerala']
                 if (!merged_districts.includes(district)){
                     districts[district] = 1
                 }
